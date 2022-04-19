@@ -12,7 +12,7 @@
   </parent>
 
   <artifactId>javafx</artifactId>
-  <version>1.0-SNAPSHOT</version>
+  <version>1.0</version>
   <packaging>jar</packaging>
   <name>${organization.name}.JavaFX</name>
   <description>Labzen JavaFX - fast desktop app develop based on JavaFX</description>
