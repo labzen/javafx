@@ -1,0 +1,10 @@
+.root {
+  /* Root variables */
+  accent_color: rgba(28, 92, 141, 0.95);
+  default_button_text_color: white;
+}
+
+.button:default {
+  -fx-background-color: accent_color;
+  -fx-text-fill: default_button_text_color;
+}

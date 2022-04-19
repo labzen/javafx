@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.text.Font?>
+<StackPane xmlns:fx="http://javafx.com/fxml/1" fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+           minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17"
+           fx:controller="cn.labzen.javafx.controller.example.AlertElementController">
+  <children>
+    <AnchorPane prefHeight="200.0" prefWidth="200.0">
+      <children>
+        <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#goBack" text="&lt; Back"/>
+        <TitledPane collapsible="false" layoutX="31.0" layoutY="60.0" prefHeight="281.0" prefWidth="539.0" text="弹框效果">
+          <content>
+            <Pane prefHeight="218.0" prefWidth="540.0">
+              <children>
+                <Button layoutX="480.0" layoutY="223.0" mnemonicParsing="false" onAction="#showDialog" text="显示"/>
+                <ComboBox fx:id="animation" layoutX="63.0" layoutY="23.0" prefWidth="150.0"/>
+                <Label layoutX="32.0" layoutY="27.0" text="动画"/>
+                <TextField fx:id="speed" layoutX="275.0" layoutY="23.0" prefHeight="23.0" prefWidth="39.0" text="1.0"/>
+                <Label layoutX="244.0" layoutY="27.0" text="速度"/>
+                <Label layoutX="397.0" layoutY="27.0" text="延迟"/>
+                <Label layoutX="476.0" layoutY="27.0" text="毫秒"/>
+                <Label layoutX="320.0" layoutY="27.0" text="X 倍速"/>
+                <TextField fx:id="delay" layoutX="428.0" layoutY="23.0" prefHeight="23.0" prefWidth="40.0" text="0"/>
+                <CheckBox fx:id="overlayClose" layoutX="63.0" layoutY="71.0" mnemonicParsing="false" selected="true"
+                          text="蒙层点击关闭弹框"/>
+                <ColorPicker fx:id="colorPick" layoutX="314.0" layoutY="68.0">
+                  <value>
+                    <Color/>
+                  </value>
+                </ColorPicker>
+                <Label layoutX="245.0" layoutY="72.0" text="蒙层背景色"/>
+                <Label layoutX="245.0" layoutY="91.0" text="默认黑色，自带0.3透明度；改其他色请设置透明度" textFill="#8d8d8d">
+                  <font>
+                    <Font size="10.0"/>
+                  </font>
+                </Label>
+                <TextField fx:id="closeDelay" layoutX="63.0" layoutY="116.0" prefHeight="23.0" prefWidth="49.0"
+                           text="0"/>
+                <Label layoutX="32.0" layoutY="120.0" text="延迟"/>
+                <Label layoutX="118.0" layoutY="120.0" text="毫秒后自动关闭"/>
+                <Label layoutX="61.0" layoutY="143.0" text="显示show()方法也可以延迟" textFill="#8d8d8d">
+                  <font>
+                    <Font size="10.0"/>
+                  </font>
+                </Label>
+                <ComboBox fx:id="pos" layoutX="63.0" layoutY="173.0" prefWidth="150.0"/>
+                <Label layoutX="32.0" layoutY="177.0" text="位置"/>
+                <Label layoutX="251.0" layoutY="177.0" text="位置微调"/>
+                <Label layoutX="389.0" layoutY="152.0" text="上"/>
+                <TextField fx:id="mt" layoutX="378.0" layoutY="129.0" prefHeight="23.0" prefWidth="36.0" text="0"/>
+                <Label layoutX="446.0" layoutY="188.0" text="右"/>
+                <TextField fx:id="mr" layoutX="435.0" layoutY="165.0" prefHeight="23.0" prefWidth="36.0" text="0"/>
+                <Label layoutX="329.0" layoutY="188.0" text="左"/>
+                <TextField fx:id="ml" layoutX="318.0" layoutY="165.0" prefHeight="23.0" prefWidth="36.0" text="0"/>
+                <Label layoutX="389.0" layoutY="224.0" text="下"/>
+                <TextField fx:id="mb" layoutX="378.0" layoutY="201.0" prefHeight="23.0" prefWidth="36.0" text="0"/>
+                <Label layoutX="385.0" layoutY="174.0" text="像素" textFill="#8d8d8d">
+                  <font>
+                    <Font size="10.0"/>
+                  </font>
+                </Label>
+              </children>
+            </Pane>
+          </content>
+        </TitledPane>
+        <Label layoutX="93.0" layoutY="41.0" text="事件：" textFill="#4a3bae"/>
+        <Label fx:id="eventDetails" layoutX="129.0" layoutY="41.0" prefHeight="15.0" prefWidth="440.0"
+               textFill="#4a3bae"/>
+      </children>
+    </AnchorPane>
+  </children>
+</StackPane>

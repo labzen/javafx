@@ -1,0 +1,67 @@
+/* ========================= tray ================================= */
+
+.context-menu .separator {
+  -fx-padding: 0.1em 0.3em 0.1em 0.3em;
+}
+
+.menu-item {
+  -text_color: #333333;
+
+  -fx-padding: 0.4em 0.5em 0.4em 0.5em;
+}
+
+.menu-item .label {
+  -fx-padding: 0.07em 0.5em 0em 0.5em;
+  -fx-text-fill: -text_color;
+}
+
+.menu > .right-container {
+  -fx-padding: 0em 0em 0em 1em;
+}
+
+.menu > .right-container > .arrow {
+  -fx-shape: "M8.06,20.938L7,20l8-8L7,4l1.06-0.938L16.917,12L8.06,20.938z";
+  -fx-scale-shape: true;
+  -fx-scale-y: 0.65;
+  -fx-background-color: -text_color;
+}
+
+.menu-item:hover,
+.menu-item:focused,
+.menu-item:hover > .right-container,
+.menu-item:hover > .left-container,
+.menu-item:focused > .right-container,
+.menu-item:focused > .left-container {
+  -fx-background-color: #cfcfcfdd;
+}
+
+.menu-item:pressed,
+.menu-item:pressed > .right-container,
+.menu-item:pressed > .left-container {
+  -fx-background-color: #c0c0c0ee;
+}
+
+.menu-item:disabled:hover,
+.menu-item:disabled:focused,
+.menu-item:disabled:pressed {
+  -fx-background-color: transparent;
+}
+
+/*.menu-item StackPane {*/
+/*  -fx-background-color: aquamarine;*/
+/*  */
+/*}*/
+
+.menu-item .check-box {
+  -fx-padding: 0em 0em 0em 0.2em;
+}
+
+.menu-item .check-box > .box {
+  -fx-pref-width: 1.1em;
+  -fx-pref-height: 1.1em;
+}
+
+.menu-item > .check-box > > .mark {
+  -fx-pref-width: 0.2em;
+  -fx-pref-height: 0.2em;
+}

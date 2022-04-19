@@ -1,0 +1,326 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.labzen.cn/"
+           elementFormDefault="qualified" version="1.0">
+  <xs:element name="app">
+    <xs:annotation>
+      <xs:documentation source="version">1.0</xs:documentation>
+      <xs:documentation source="description" xml:lang="zh">"JavaFX Application" Root节点</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <!-- META -->
+        <xs:element name="meta">
+          <xs:annotation>
+            <xs:documentation source="version">1.0</xs:documentation>
+            <xs:documentation source="description" xml:lang="zh">应用基础信息</xs:documentation>
+          </xs:annotation>
+          <xs:complexType>
+            <xs:sequence>
+              <!-- 目录结构 -->
+              <xs:element name="structure" minOccurs="0">
+                <xs:annotation>
+                  <xs:documentation source="version">1.0</xs:documentation>
+                  <xs:documentation source="description" xml:lang="zh">应用项目目录结构</xs:documentation>
+                </xs:annotation>
+                <xs:complexType>
+                  <xs:attribute name="view" type="xs:string" default="/view">
+                    <xs:annotation>
+                      <xs:documentation source="version">1.0</xs:documentation>
+                      <xs:documentation source="description" xml:lang="zh">
+                        视图 (fxml) 文件位置，默认 "/view"
+                      </xs:documentation>
+                    </xs:annotation>
+                  </xs:attribute>
+                  <xs:attribute name="style" type="xs:string" default="/style">
+                    <xs:annotation>
+                      <xs:documentation source="version">1.0</xs:documentation>
+                      <xs:documentation source="description" xml:lang="zh">
+                        样式 (css) 文件位置，默认 "/style"
+                      </xs:documentation>
+                    </xs:annotation>
+                  </xs:attribute>
+                  <xs:attribute name="script" type="xs:string" default="/script">
+                    <xs:annotation>
+                      <xs:documentation source="version">1.0</xs:documentation>
+                      <xs:documentation source="description" xml:lang="zh">
+                        脚本 (js) 文件位置，默认 "/script"
+                      </xs:documentation>
+                    </xs:annotation>
+                  </xs:attribute>
+                  <xs:attribute name="font" type="xs:string" default="/font">
+                    <xs:annotation>
+                      <xs:documentation source="version">1.0</xs:documentation>
+                      <xs:documentation source="description" xml:lang="zh">
+                        字体 (ttf) 文件位置，默认 "/style"
+                      </xs:documentation>
+                    </xs:annotation>
+                  </xs:attribute>
+                  <xs:attribute name="image" type="xs:string" default="/image">
+                    <xs:annotation>
+                      <xs:documentation source="version">1.0</xs:documentation>
+                      <xs:documentation source="description" xml:lang="zh">
+                        图片 (png,jpeg,jpg,bmp,gif) 文件位置，默认 "/image"
+                      </xs:documentation>
+                    </xs:annotation>
+                  </xs:attribute>
+                  <xs:attribute name="icon" type="xs:string" default="/icon">
+                    <xs:annotation>
+                      <xs:documentation source="version">1.0</xs:documentation>
+                      <xs:documentation source="description" xml:lang="zh">
+                        图标 (png,icon) 文件位置，默认 "/icon"
+                      </xs:documentation>
+                    </xs:annotation>
+                  </xs:attribute>
+                  <xs:attribute name="sound" type="xs:string" default="/sound">
+                    <xs:annotation>
+                      <xs:documentation source="version">1.0</xs:documentation>
+                      <xs:documentation source="description" xml:lang="zh">
+                        音频 (wav,mp3) 文件位置，默认 "/sound"
+                      </xs:documentation>
+                    </xs:annotation>
+                  </xs:attribute>
+                  <xs:attribute name="video" type="xs:string" default="/video">
+                    <xs:annotation>
+                      <xs:documentation source="version">1.0</xs:documentation>
+                      <xs:documentation source="description" xml:lang="zh">
+                        视频 (mp4,avi) 文件位置，默认 "/video"
+                      </xs:documentation>
+                    </xs:annotation>
+                  </xs:attribute>
+                  <xs:attribute name="db" type="xs:string" default="/db">
+                    <xs:annotation>
+                      <xs:documentation source="version">1.0</xs:documentation>
+                      <xs:documentation source="description" xml:lang="zh">
+                        数据库 (sql) 文件位置，默认 "/db"
+                      </xs:documentation>
+                    </xs:annotation>
+                  </xs:attribute>
+                </xs:complexType>
+              </xs:element>
+              <!-- 主要类 -->
+              <xs:element name="bootstrap">
+                <xs:annotation>
+                  <xs:documentation source="version">1.0</xs:documentation>
+                  <xs:documentation source="description" xml:lang="zh">项目启动相关</xs:documentation>
+                </xs:annotation>
+                <xs:complexType>
+                  <xs:sequence>
+                    <!-- 预加载 -->
+                    <xs:element name="preload" minOccurs="0">
+                      <xs:annotation>
+                        <xs:documentation source="version">1.0</xs:documentation>
+                        <xs:documentation source="description" xml:lang="zh">
+                          预加载定义，只有当 "app/meta/bootstrap#preload" 为true时有效，且必须设置
+                        </xs:documentation>
+                      </xs:annotation>
+                      <xs:complexType>
+                        <xs:sequence>
+                        </xs:sequence>
+                        <!-- 预加载界面view -->
+                        <xs:attribute name="view" use="required" type="xs:string">
+                          <xs:annotation>
+                            <xs:documentation source="version">1.0</xs:documentation>
+                            <xs:documentation source="description" xml:lang="zh">
+                              preload view (fxml文件，忽略 .fxml 扩展名)，相对 “app/meta/structure/view”的指定目录下
+                            </xs:documentation>
+                          </xs:annotation>
+                          <xs:simpleType>
+                            <xs:restriction>
+                              <xs:pattern value="^\\w+\\.fxml$"/>
+                            </xs:restriction>
+                          </xs:simpleType>
+                        </xs:attribute>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                  <!-- javafx 应用类指定 -->
+                  <xs:attribute name="application-class" use="required">
+                    <xs:annotation>
+                      <xs:documentation source="version">1.0</xs:documentation>
+                      <xs:documentation source="description" xml:lang="zh">
+                        JavaFx Application Class
+                        <br/>
+                        需继承自类 cn.labzen.javafx.LabzenApplication
+                      </xs:documentation>
+                    </xs:annotation>
+                  </xs:attribute>
+                  <!-- javafx 首界面view -->
+                  <xs:attribute name="view" use="required" type="xs:string">
+                    <xs:annotation>
+                      <xs:documentation source="version">1.0</xs:documentation>
+                      <xs:documentation source="description" xml:lang="zh">
+                        primary view (fxml文件，忽略 .fxml 扩展名)，相对 “app/meta/structure/view”的指定目录下
+                      </xs:documentation>
+                    </xs:annotation>
+                    <xs:simpleType>
+                      <xs:restriction>
+                        <xs:pattern value="^\\w+\\.fxml$"/>
+                      </xs:restriction>
+                    </xs:simpleType>
+                  </xs:attribute>
+                  <!-- 应用图标 -->
+                  <xs:attribute name="icons" type="xs:string">
+                    <xs:annotation>
+                      <xs:documentation source="version">1.0</xs:documentation>
+                      <xs:documentation source="description" xml:lang="zh">应用图标，多个图标使用英文逗号分隔</xs:documentation>
+                    </xs:annotation>
+                  </xs:attribute>
+                  <!-- 指定开启预加载 -->
+                  <xs:attribute name="need-preload" default="true">
+                    <xs:annotation>
+                      <xs:documentation source="version">1.0</xs:documentation>
+                      <xs:documentation source="description" xml:lang="zh">需要预加载界面</xs:documentation>
+                    </xs:annotation>
+                    <xs:simpleType>
+                      <xs:restriction>
+                        <xs:enumeration value="false"/>
+                        <xs:enumeration value="true"/>
+                      </xs:restriction>
+                    </xs:simpleType>
+                  </xs:attribute>
+                </xs:complexType>
+              </xs:element>
+              <!-- 托盘（菜单）相关 -->
+              <xs:element name="tray" minOccurs="0">
+                <xs:annotation>
+                  <xs:documentation source="version">1.0</xs:documentation>
+                  <xs:documentation source="description" xml:lang="zh">托盘（菜单）相关</xs:documentation>
+                </xs:annotation>
+                <xs:complexType>
+                  <!-- 托盘图标 -->
+                  <xs:attribute name="icon" type="xs:string">
+                    <xs:annotation>
+                      <xs:documentation source="version">1.0</xs:documentation>
+                      <xs:documentation source="description" xml:lang="zh">托盘图标文件位置</xs:documentation>
+                    </xs:annotation>
+                  </xs:attribute>
+                  <!-- 托盘图标提示语 -->
+                  <xs:attribute name="tooltip" type="xs:string">
+                    <xs:annotation>
+                      <xs:documentation source="version">1.0</xs:documentation>
+                      <xs:documentation source="description" xml:lang="zh">
+                        托盘图标的文字提示，不设置时使用应用标题（app.meta.title）
+                      </xs:documentation>
+                    </xs:annotation>
+                  </xs:attribute>
+                  <!-- 托盘功能处理类 -->
+                  <xs:attribute name="handler-class" type="xs:string" use="required">
+                    <xs:annotation>
+                      <xs:documentation source="version">1.0</xs:documentation>
+                      <xs:documentation source="description" xml:lang="zh">
+                        托盘菜单处理类全限定名，需要继承AbstractTrayMenuController
+                      </xs:documentation>
+                    </xs:annotation>
+                  </xs:attribute>
+                  <!-- 托盘及菜单的样式表 -->
+                  <xs:attribute name="css" type="xs:string">
+                    <xs:annotation>
+                      <xs:documentation source="version">1.0</xs:documentation>
+                      <xs:documentation source="description" xml:lang="zh">
+                        托盘及菜单使用的样式表文件（列表），如多个文件，使用英文逗号','分隔
+                      </xs:documentation>
+                    </xs:annotation>
+                  </xs:attribute>
+                </xs:complexType>
+              </xs:element>
+              <!-- 快捷键相关 -->
+              <xs:element name="shortcuts" minOccurs="0">
+                <xs:annotation>
+                  <xs:documentation source="version">1.0</xs:documentation>
+                  <xs:documentation source="description" xml:lang="zh">托盘（菜单）相关</xs:documentation>
+                </xs:annotation>
+                <xs:complexType>
+                  <!-- 快捷键功能处理类 -->
+                  <xs:attribute name="handler-class" type="xs:string" use="required">
+                    <xs:annotation>
+                      <xs:documentation source="version">1.0</xs:documentation>
+                      <xs:documentation source="description" xml:lang="zh">
+                        快捷键功能处理类，需要实现ShortcutsController
+                      </xs:documentation>
+                    </xs:annotation>
+                  </xs:attribute>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+            <!-- ID/名称 -->
+            <xs:attribute name="id" use="required" type="xs:string">
+              <xs:annotation>
+                <xs:documentation source="version">1.0</xs:documentation>
+                <xs:documentation source="description" xml:lang="zh">应用的程序ID（名称）</xs:documentation>
+              </xs:annotation>
+              <xs:simpleType>
+                <xs:restriction>
+                  <xs:pattern value="\\w{4,}"/>
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:attribute>
+            <!-- 程序标题 -->
+            <xs:attribute name="title" use="required" type="xs:string">
+              <xs:annotation>
+                <xs:documentation source="version">1.0</xs:documentation>
+                <xs:documentation source="description" xml:lang="zh">应用的标题</xs:documentation>
+              </xs:annotation>
+              <xs:simpleType>
+                <xs:restriction>
+                  <xs:minLength value="3"/>
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:attribute>
+            <!-- 主题 -->
+            <xs:attribute name="theme" type="xs:string">
+              <xs:annotation>
+                <xs:documentation source="version">1.0</xs:documentation>
+                <xs:documentation source="description" xml:lang="zh">
+                  应用默认皮肤（以'/'为前缀，相对classpath下的皮肤目录路径）
+                </xs:documentation>
+              </xs:annotation>
+              <xs:simpleType>
+                <xs:restriction>
+                  <xs:pattern value="/.*"/>
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:attribute>
+            <!-- 关闭程序最小化到系统托盘 -->
+            <xs:attribute name="close-to-tray-icon" type="xs:boolean" default="false">
+              <xs:annotation>
+                <xs:documentation source="version">1.0</xs:documentation>
+                <xs:documentation source="description" xml:lang="zh">
+                  是否最小化到系统托盘？默认false；为true时，当最后一个窗口关闭后，APP也不会退出，而是可以通过点击系统托盘图标恢复；为false时，最后一个窗口关闭，APP也随着退出；（参考Platform.setImplicitExit()）
+                </xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+          </xs:complexType>
+        </xs:element>
+
+        <!-- 调试 -->
+        <xs:element name="debug">
+          <xs:annotation>
+            <xs:documentation source="version">1.0</xs:documentation>
+            <xs:documentation source="description" xml:lang="zh">项目调试相关</xs:documentation>
+          </xs:annotation>
+          <xs:complexType>
+            <xs:sequence>
+              <!-- 样式表动态更新 -->
+              <xs:element name="css" minOccurs="0">
+                <xs:annotation>
+                  <xs:documentation source="version">1.0</xs:documentation>
+                  <xs:documentation source="description" xml:lang="zh">对项目样式表监控更新</xs:documentation>
+                </xs:annotation>
+                <xs:complexType>
+                  <xs:attribute name="classpath" type="xs:string">
+                    <xs:annotation>
+                      <xs:documentation source="version">1.0</xs:documentation>
+                      <xs:documentation source="description" xml:lang="zh">
+                        受监控的样式表文件应用元素类路径，默认监控路径 - cn.labzen下所有被注解的类元素
+                      </xs:documentation>
+                    </xs:annotation>
+                  </xs:attribute>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

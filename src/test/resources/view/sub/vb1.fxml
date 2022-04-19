@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Arc?>
+<?import javafx.scene.shape.Ellipse?>
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+            prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17">
+  <children>
+    <Ellipse fill="DODGERBLUE" layoutX="189.0" layoutY="120.0" radiusX="100.0" radiusY="80.0" stroke="BLACK"
+             strokeType="INSIDE"/>
+    <Arc fill="DODGERBLUE" layoutX="470.0" layoutY="237.0" length="270.0" radiusX="100.0" radiusY="100.0"
+         startAngle="45.0" stroke="BLACK" strokeType="INSIDE" type="ROUND"/>
+    <TextField layoutX="75.0" layoutY="269.0"/>
+  </children>
+</AnchorPane>

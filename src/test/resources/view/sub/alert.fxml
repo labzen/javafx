@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.Pane?>
+<Pane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+      prefHeight="100.0" prefWidth="250.0" xmlns="http://javafx.com/javafx/17"
+      fx:controller="cn.labzen.javafx.controller.AlertViewController">
+  <children>
+    <Button layoutX="196.0" layoutY="63.0" mnemonicParsing="false" text="关掉"/>
+    <Label layoutX="35.0" layoutY="29.0" text="弹出框哈"/>
+    <TextField layoutX="125.0" layoutY="25.0" prefHeight="23.0" prefWidth="88.0"/>
+    <TextField layoutX="23.0" layoutY="63.0"/>
+  </children>
+</Pane>
