@@ -63,7 +63,7 @@ internal object FileWatcher {
   fun start() {
     if (interrupted) {
       interrupted = false
-      thread(name = "Lynx-CSS-File-Watcher", block = watching)
+      thread(name = "Labzen-CSS-File-Watcher", block = watching)
       logger.info("DEBUG: 动态样式表变更监控功能已开启（请在生产环境中移除掉所有的@MonitorCss注解）")
     }
   }

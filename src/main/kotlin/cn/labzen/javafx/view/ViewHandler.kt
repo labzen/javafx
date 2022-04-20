@@ -41,7 +41,7 @@ object ViewHandler {
       is LabzenView -> lc.also { it.setId(id) }
       null -> null
       else -> {
-        logger.warn("强烈建议将视图controller类[${lc.javaClass}]继承LynxView")
+        logger.warn("强烈建议将视图controller类[${lc.javaClass}]继承LabzenView")
         null
       }
     }
@@ -161,7 +161,7 @@ object ViewHandler {
 
     val controller = primeView.controller
     if (controller !is LabzenView) {
-      throw IllegalArgumentException("在主视图中实现局部视图变更，需要继承类 cn.labzen.javafx.view.LynxView")
+      throw IllegalArgumentException("在主视图中实现局部视图变更，需要继承类 cn.labzen.javafx.view.LabzenView")
     }
 
     return controller.partialViewContainerNode(nodeId) ?: throw IllegalArgumentException("找不到可做局部视图变更的容器节点")

@@ -66,7 +66,7 @@ object LabzenJavaFX {
       }
       return Class.forName(caller.className)
     } catch (e: NoSuchElementException) {
-      throw ApplicationBootException("Lynx JavaFX的启动需要通过Spring Boot的main函数调起（别忘注解@SpringBootApplication）")
+      throw ApplicationBootException("Labzen JavaFX的启动需要通过Spring Boot的main函数调起（别忘注解@SpringBootApplication）")
     }
   }
 

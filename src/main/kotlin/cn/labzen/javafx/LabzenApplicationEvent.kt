@@ -1,7 +1,7 @@
 package cn.labzen.javafx
 
 /**
- * todo 通过app.xml 或者 LynxJavaFX 指定该接口实现类
+ * todo 通过app.xml 或者 LabzenJavaFX 指定该接口实现类
  */
 interface LabzenApplicationEvent {
 

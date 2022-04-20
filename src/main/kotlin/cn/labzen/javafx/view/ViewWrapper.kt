@@ -55,9 +55,9 @@ class ViewWrapper(
 
   fun resolveTheme(): String? =
     when {
-      // 如果视图LynxView指定了明确的皮肤，优先使用
+      // 如果视图LabzenView指定了明确的皮肤，优先使用
       controller?.theme()?.isNotBlank() == true -> controller.theme()
-      // 否则看窗体LynxStage是否指定了明确的皮肤，如有则用
+      // 否则看窗体LabzenStage是否指定了明确的皮肤，如有则用
       // 这里stage未必有值，开发者可以自己加载视图，而未指明视图所依附的窗体
       stage.getOrNull()?.theme()?.isNotBlank() == true -> stage.get().theme()
       // 视图和依附的窗体都未明确定义皮肤，则使用默认皮肤
