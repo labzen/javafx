@@ -67,21 +67,27 @@ internal class Bootstrap {
   lateinit var application: String
 
   @XStreamAsAttribute
-  lateinit var view: String
-
-  @XStreamAsAttribute
   var icons: String? = null
 
-  @XStreamAsAttribute
-  @XStreamAlias("need-preload")
-  var needPreload: String = "true"
   var preload: Preload? = null
+  lateinit var primary: Primary
 }
 
 @XStreamAlias("preload")
 internal class Preload {
+
   @XStreamAsAttribute
   lateinit var view: String
+}
+
+@XStreamAlias("primary")
+internal class Primary {
+
+  @XStreamAsAttribute
+  var dispatcher: String? = null
+
+  @XStreamAsAttribute
+  var view: String? = null
 }
 
 @XStreamAlias("tray")

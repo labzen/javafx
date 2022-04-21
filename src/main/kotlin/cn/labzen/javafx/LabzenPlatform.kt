@@ -8,6 +8,7 @@ import cn.labzen.javafx.config.App
 import cn.labzen.javafx.exception.ApplicationBootException
 import cn.labzen.javafx.exception.ApplicationException
 import cn.labzen.javafx.preload.PreloadDetails
+import cn.labzen.javafx.view.ViewDispatcher
 import cn.labzen.logger.kotlin.logger
 import javafx.application.Platform
 import javafx.scene.image.Image
@@ -79,9 +80,9 @@ object LabzenPlatform {
    */
   internal fun resource(vararg locations: String): URL? {
     val fac = container().fxApplicationClass
-    return locations.mapNotNull {
+    return locations.firstNotNullOfOrNull {
       fac.getResource(it)
-    }.firstOrNull()
+    }
   }
 
   internal data class Container(
@@ -120,18 +121,23 @@ object LabzenPlatform {
     private val structure = config.meta.structure
     val resourceViewPath = structure.view.insureEndsWith("/").insureStartsWith("/")
 
-    val enablePreload = "true".equals(config.meta.bootstrap.needPreload, true)
-    val preloadView = run {
-      val bootstrap = config.meta.bootstrap
-      if ("false".equals(bootstrap.needPreload, true)) {
-        null
-      } else {
-        bootstrap.preload?.view?.trimStart('/')
-          ?: throw ApplicationBootException("""未找到 "app/meta/bootstrap/preload" 的配置 """)
-      }
-    }
-    val primaryView = config.meta.bootstrap.view.trimStart('/')
+    val preloadView = config.meta.bootstrap.preload?.view?.trimStart('/')
+    val enablePreload = preloadView != null
     val preloadDetails = InitOnceProperty<PreloadDetails>()
+
+    val primaryView = config.meta.bootstrap.primary.view?.trimStart('/')
+    val primaryDispatcher = config.meta.bootstrap.primary.dispatcher?.let {
+      try {
+        @Suppress("UNCHECKED_CAST")
+        fxApplicationClass.classLoader.loadClass(it) as Class<ViewDispatcher>
+      } catch (e: Exception) {
+        throw ApplicationBootException(e, "找不到指定的视图调度类：$it")
+      }
+    } ?: run {
+      primaryView
+        ?: throw  ApplicationBootException(""" 配置文件 "app/meta/bootstrap/primary" 中view与dispatcher属性不能同时为空""")
+      null
+    }
 
     fun loadIconsIfNecessary() {
       if (this::icons.isInitialized) {

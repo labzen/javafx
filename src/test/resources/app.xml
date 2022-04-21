@@ -2,8 +2,9 @@
 <app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.labzen.cn/"
      xsi:schemaLocation="http://www.labzen.cn/ http://www.labzen.cn/fx-app-1.0.xsd">
   <meta id="demo_app" title="应用demo" close-to-tray-icon="true">
-    <bootstrap application-class="cn.labzen.javafx.App" view="AppView">
+    <bootstrap application-class="cn.labzen.javafx.App">
       <preload view="CoverView"/>
+      <primary dispatcher="cn.labzen.javafx.init.PrimaryDispatcher"/>
     </bootstrap>
     <tray handler-class="cn.labzen.javafx.TrayController"/>
     <shortcuts handler-class="cn.labzen.javafx.GlobalShortcutsController"/>

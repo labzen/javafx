@@ -1,12 +1,12 @@
 package cn.labzen.javafx
 
+import cn.labzen.javafx.exception.ApplicationBootException
 import cn.labzen.javafx.initialize.LabzenApplicationInitializer
 import cn.labzen.javafx.initialize.LabzenInitializerExecutor
 import cn.labzen.javafx.preload.PreloadDetails
 import cn.labzen.javafx.stage.LabzenStage
 import cn.labzen.javafx.stage.StageHandler
 import cn.labzen.javafx.view.LabzenView
-import cn.labzen.logger.kotlin.logger
 import javafx.application.Application
 import javafx.application.Preloader
 import javafx.stage.Stage
@@ -14,7 +14,6 @@ import java.util.concurrent.CountDownLatch
 
 abstract class LabzenApplication : Application(), LabzenStage {
 
-  private val logger = logger { }
   private var initializers: List<LabzenApplicationInitializer>? = null
   private lateinit var stageRef: Stage
 
@@ -40,9 +39,19 @@ abstract class LabzenApplication : Application(), LabzenStage {
       closed(it, stageRef)
     }
 
-    StageHandler.go(viewMark = container.primaryView)
+    StageHandler.go(viewMark = primaryView())
     stageRef.show()
   }
+
+  private fun primaryView(): String =
+    LabzenPlatform.container().primaryDispatcher?.let {
+      try {
+        val dispatcher = it.getDeclaredConstructor().newInstance()
+        dispatcher.dispatch()
+      } catch (e: Exception) {
+        throw ApplicationBootException(e, "无法实例化或正确执行视图调度：$it")
+      }
+    } ?: LabzenPlatform.container().primaryView!!
 
   /**
    * Application主界面跟随默认皮肤，这里不需要设置，如确需改变，请通过[LabzenView]设定

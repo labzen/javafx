@@ -124,11 +124,34 @@
                               preload view (fxml文件，忽略 .fxml 扩展名)，相对 “app/meta/structure/view”的指定目录下
                             </xs:documentation>
                           </xs:annotation>
-                          <xs:simpleType>
-                            <xs:restriction>
-                              <xs:pattern value="^\\w+\\.fxml$"/>
-                            </xs:restriction>
-                          </xs:simpleType>
+                        </xs:attribute>
+                      </xs:complexType>
+                    </xs:element>
+
+                    <!-- 主界面 -->
+                    <xs:element name="primary">
+                      <xs:annotation>
+                        <xs:documentation source="version">1.0</xs:documentation>
+                        <xs:documentation source="description" xml:lang="zh">
+                          设置主界面View，可设置多个主界面View（由dispatcher属性来决定显示哪一个）
+                        </xs:documentation>
+                      </xs:annotation>
+                      <xs:complexType>
+                        <xs:attribute name="view" type="xs:string">
+                          <xs:annotation>
+                            <xs:documentation source="version">1.0</xs:documentation>
+                            <xs:documentation source="description" xml:lang="zh">
+                              view名(fxml文件，忽略 .fxml 扩展名)，相对 “app/meta/structure/view”的指定目录下
+                            </xs:documentation>
+                          </xs:annotation>
+                        </xs:attribute>
+                        <xs:attribute name="dispatcher" type="xs:string">
+                          <xs:annotation>
+                            <xs:documentation source="version">1.0</xs:documentation>
+                            <xs:documentation source="description" xml:lang="zh">
+                              主界面View的调度逻辑类全限定名（实现cn.labzen.javafx.view.ViewDispatcher接口），当且仅当未设置view属性设置时有效，用于决定显示哪一个view
+                            </xs:documentation>
+                          </xs:annotation>
                         </xs:attribute>
                       </xs:complexType>
                     </xs:element>
@@ -144,39 +167,12 @@
                       </xs:documentation>
                     </xs:annotation>
                   </xs:attribute>
-                  <!-- javafx 首界面view -->
-                  <xs:attribute name="view" use="required" type="xs:string">
-                    <xs:annotation>
-                      <xs:documentation source="version">1.0</xs:documentation>
-                      <xs:documentation source="description" xml:lang="zh">
-                        primary view (fxml文件，忽略 .fxml 扩展名)，相对 “app/meta/structure/view”的指定目录下
-                      </xs:documentation>
-                    </xs:annotation>
-                    <xs:simpleType>
-                      <xs:restriction>
-                        <xs:pattern value="^\\w+\\.fxml$"/>
-                      </xs:restriction>
-                    </xs:simpleType>
-                  </xs:attribute>
                   <!-- 应用图标 -->
                   <xs:attribute name="icons" type="xs:string">
                     <xs:annotation>
                       <xs:documentation source="version">1.0</xs:documentation>
                       <xs:documentation source="description" xml:lang="zh">应用图标，多个图标使用英文逗号分隔</xs:documentation>
                     </xs:annotation>
-                  </xs:attribute>
-                  <!-- 指定开启预加载 -->
-                  <xs:attribute name="need-preload" default="true">
-                    <xs:annotation>
-                      <xs:documentation source="version">1.0</xs:documentation>
-                      <xs:documentation source="description" xml:lang="zh">需要预加载界面</xs:documentation>
-                    </xs:annotation>
-                    <xs:simpleType>
-                      <xs:restriction>
-                        <xs:enumeration value="false"/>
-                        <xs:enumeration value="true"/>
-                      </xs:restriction>
-                    </xs:simpleType>
                   </xs:attribute>
                 </xs:complexType>
               </xs:element>
