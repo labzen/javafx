@@ -7,10 +7,7 @@ import com.google.common.util.concurrent.AtomicDouble
 import com.sun.javafx.application.LauncherImpl.notifyPreloader
 import java.time.LocalDateTime
 
-class PreloadDetails(
-  val count: Int,
-  val weightAmounts: Double
-) {
+class PreloadDetails(val weightAmounts: Double) {
   private val records = mutableMapOf<Class<out LabzenApplicationInitializer>, Record>()
 
   val progress = AtomicDouble(0.0)

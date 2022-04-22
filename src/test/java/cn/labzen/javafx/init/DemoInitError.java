@@ -13,6 +13,11 @@ public class DemoInitError extends LabzenApplicationInitializer {
     return 2;
   }
 
+  @Override
+  public int order() {
+    return 4;
+  }
+
   @Nullable
   @Override
   public String finishedMessage() {

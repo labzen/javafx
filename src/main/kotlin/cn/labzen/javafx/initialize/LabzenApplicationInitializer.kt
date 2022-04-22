@@ -13,6 +13,11 @@ abstract class LabzenApplicationInitializer {
   open fun weight(): Int = 1
 
   /**
+   * 初始化时的执行顺序，默认为1。当多个初始化器的[order]属性相同时，将同时并行执行；不相同的[order]将按从小到大的顺序执行
+   */
+  open fun order(): Int = 1
+
+  /**
    * 初始化器开始执行前输出的信息
    */
   open fun startMessage(): String? = null

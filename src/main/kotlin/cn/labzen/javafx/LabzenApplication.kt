@@ -14,14 +14,15 @@ import java.util.concurrent.CountDownLatch
 
 abstract class LabzenApplication : Application(), LabzenStage {
 
-  private var initializers: List<LabzenApplicationInitializer>? = null
+  private var allInitializers: List<List<LabzenApplicationInitializer>>? = null
   private lateinit var stageRef: Stage
 
   final override fun init() {
+    LabzenPlatform.container().loadIconsIfNecessary()
+
     prepareInitializers()
     executeInitializers()
 
-    LabzenPlatform.container().loadIconsIfNecessary()
     notifyPreloader(Preloader.StateChangeNotification(Preloader.StateChangeNotification.Type.BEFORE_START))
   }
 
@@ -75,27 +76,37 @@ abstract class LabzenApplication : Application(), LabzenStage {
     val weightAmounts = initializers.sumOf {
       it.weight()
     }.toDouble()
-    val initializerCount = initializers.size
 
-    val preloadDetails = PreloadDetails(initializerCount, weightAmounts)
+    val preloadDetails = PreloadDetails(weightAmounts)
     LabzenPlatform.container().preloadDetails.set(preloadDetails)
 
-    this.initializers = initializers.toList()
+    this.allInitializers = initializers.groupBy { it.order() }.toSortedMap().values.toList()
   }
 
   private fun executeInitializers() {
-    val preloadDetails = LabzenPlatform.container().preloadDetails.get()
-    val countDown = CountDownLatch(preloadDetails.count)
+    // val preloadDetails = LabzenPlatform.container().preloadDetails.get()
 
-    val executors = this.initializers!!.map { initializer ->
-      LabzenInitializerExecutor(initializer, preloadDetails.checkIn(initializer))
+    for (ois in allInitializers!!) {
+      executeOrderedInitializer(ois)
     }
+
+    this.allInitializers = null
+    Thread.sleep(1000)
+  }
+
+  private fun executeOrderedInitializer(orderedInitializers: List<LabzenApplicationInitializer>) {
+    val countDown = CountDownLatch(orderedInitializers.size)
+    val preloadDetails = LabzenPlatform.container().preloadDetails.get()
+
+    val executors = orderedInitializers.map {
+      LabzenInitializerExecutor(it, preloadDetails.checkIn(it))
+    }
+
     executors.forEach {
       it.execute() { countDown.countDown() }
     }
 
     countDown.await()
-    this.initializers = null
   }
 
   final override fun getStage(): Stage = stageRef

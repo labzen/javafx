@@ -12,6 +12,11 @@ public class DemoInit2 extends LabzenApplicationInitializer {
     return 8;
   }
 
+  @Override
+  public int order() {
+    return 2;
+  }
+
   @Nullable
   @Override
   public String finishedMessage() {
