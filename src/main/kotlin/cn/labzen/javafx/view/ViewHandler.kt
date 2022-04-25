@@ -32,7 +32,9 @@ object ViewHandler {
 
     val resource = LabzenPlatform.resource(path)
     resource ?: throw StageViewOperationException("找不到视图文件：$viewName")
-    val loader = FXMLLoader(resource)
+    val loader = FXMLLoader(resource, null, null) {
+      LabzenPlatform.container().springApplicationContext.get().getBean(it)
+    }
 
     val id = Randoms.string(5)
     val loadedView: Parent = loader.load()
