@@ -1,40 +1,86 @@
 package cn.labzen.javafx.stage
 
+import cn.labzen.cells.core.utils.Randoms
+import cn.labzen.javafx.LabzenPlatform
 import cn.labzen.javafx.exception.StageViewOperationException
 import cn.labzen.logger.kotlin.logger
+import com.sun.javafx.stage.StageHelper
 import javafx.application.Platform
 import javafx.collections.FXCollections
+import javafx.stage.Stage
 
 object StageHandler {
 
   private val logger = logger { }
 
-  private const val PRIMARY_STAGE_KEY = "__MAIN_STAGE__"
-  private val stages = FXCollections.observableHashMap<String, LabzenStage>()
+  private lateinit var mainStage: LabzenStageContainer
+  private val stages = FXCollections.observableHashMap<String, LabzenStageContainer>()
   private val stageSceneHistories = mutableMapOf<String, StageViewHistory>()
 
-  internal fun setPrimaryStage(stage: LabzenStage) {
-    stages[PRIMARY_STAGE_KEY] = stage
-    stageSceneHistories[PRIMARY_STAGE_KEY] = StageViewHistory()
+  internal fun setPrimaryStage(stage: LabzenStageContainer) {
+    mainStage = stage
+
+    stages.computeIfAbsent(stage.id()) { stage }
+    stageSceneHistories.computeIfAbsent(stage.id()) { StageViewHistory() }
+    StageHelper.setPrimary(stage.instance(), true)
   }
 
-  internal fun getPrimaryStage() =
-    stages[PRIMARY_STAGE_KEY]
+  /**
+   * 切换到新的主窗体
+   * @param stage 将要成为新的主窗体
+   * @return 返回原主窗体ID
+   */
+  @JvmStatic
+  fun changePrimaryStage(stage: LabzenStageContainer): LabzenStageContainer {
+    val originalMain = mainStage
+    setPrimaryStage(stage)
+    return originalMain
+  }
+
+  internal fun primaryStage() =
+    mainStage
 
   internal fun allStages() =
     stages
 
-  fun createStage(id: String): LabzenStage? {
-    // todo 创建stage时，带一个history
-    stageSceneHistories[""] = StageViewHistory()
-    return null
+  /**
+   * 创建新的窗口
+   */
+  @JvmStatic
+  fun createStage(cls: Class<out LabzenStage>): LabzenStage {
+    val sac = LabzenPlatform.container().springApplicationContext.get()
+    val ls = sac.autowireCapableBeanFactory.createBean(cls)
+
+    stages[ls.id()] = ls
+    stageSceneHistories[ls.id()] = StageViewHistory()
+
+    val stage = Stage().also {
+      val container = LabzenPlatform.container()
+      val icons = ls.icons() ?: container.icons
+      val title = ls.title() ?: container.appTitle
+
+      it.icons.addAll(icons)
+      it.title = title
+    }
+
+    ls.setStage(stage)
+    stage.setOnCloseRequest {
+      ls.closed(it, stage)
+    }
+
+    ls.customize(stage)
+    goNow(ls.id(), ls.primaryView())
+    return ls
   }
+
+  internal fun generateStageId() = Randoms.string(10)
 
   /**
    * 获取已创建的窗口
    */
+  @JvmStatic
   fun stage(stageId: String): LabzenStage? {
-    return null
+    return stages[stageId]?.let { it as LabzenStage }
   }
 
   //，如 [cached] = true，并在视图栈中已存在该视图，则将该视图实例移至栈顶；如想同时存在多个相同的视图在栈中，则 [cached] 指为false
@@ -55,16 +101,24 @@ object StageHandler {
     parameters: Map<String, Any>? = null
   ) {
     Platform.runLater {
-      val stageKey = stageId ?: PRIMARY_STAGE_KEY
-      val stage = stages[stageKey]
-      stage ?: throw StageViewOperationException("不存在的窗口ID：$stageKey")
-
-      val history = stageSceneHistories[stageKey]!!
-      val wrapper = history.loadAndPush(viewMark, parameters)
-      wrapper.attachTo(stage)
-      wrapper.createScene()
-      stage.getStage().scene = wrapper.scene
+      goNow(stageId, viewMark, parameters)
     }
+  }
+
+  internal fun goNow(
+    stageId: String? = null,
+    viewMark: String,
+    parameters: Map<String, Any>? = null
+  ) {
+    val stage = stageId?.let {
+      stages[stageId] ?: throw StageViewOperationException("不存在的窗口ID：$stageId")
+    } ?: mainStage
+
+    val history = stageSceneHistories[stage.id()]!!
+    val wrapper = history.loadAndPush(viewMark, parameters)
+    wrapper.attachTo(stage)
+    wrapper.createScene()
+    stage.instance().scene = wrapper.scene
   }
 
   /**
@@ -83,15 +137,15 @@ object StageHandler {
     parameters: Map<String, Any>? = null
   ) {
     Platform.runLater {
-      val stageKey = stageId ?: PRIMARY_STAGE_KEY
-      val stage = stages[stageKey]
-      stage ?: throw StageViewOperationException("不存在的窗口ID：$stageKey")
+      val stage = stageId?.let {
+        stages[stageId] ?: throw StageViewOperationException("不存在的窗口ID：$stageId")
+      } ?: mainStage
 
-      val history = stageSceneHistories[stageKey]!!
+      val history = stageSceneHistories[stage.id()]!!
       val wrapper = history.searchAndPop(viewMark, parameters)
       wrapper?.apply {
         wrapper.reapplyThemeIfNecessary()
-        stage.getStage().scene = this.scene
+        stage.instance().scene = this.scene
       } ?: logger.warn("无法执行视图 back() for - stage_id: $stageId, view_mark: $viewMark")
     }
   }

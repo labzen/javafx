@@ -27,8 +27,6 @@ class DialogWindow internal constructor(alertType: AlertType, buttons: List<Butt
 
     if (headerText == null && contentText == null) {
       dialogPane.header = Pane().apply {
-        // isVisible = false
-        // background = Background(BackgroundFill(Color.RED, null, null))
       }
     }
   }

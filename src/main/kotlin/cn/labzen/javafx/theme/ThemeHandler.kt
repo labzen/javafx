@@ -2,7 +2,7 @@ package cn.labzen.javafx.theme
 
 import cn.labzen.cells.core.kotlin.insureStartsWith
 import cn.labzen.javafx.exception.DialogException
-import cn.labzen.javafx.stage.LabzenStage
+import cn.labzen.javafx.stage.LabzenStageContainer
 import cn.labzen.javafx.stage.StageHandler
 import cn.labzen.javafx.view.LabzenView
 import cn.labzen.javafx.view.ViewHandler
@@ -40,16 +40,16 @@ object ThemeHandler {
   }
 
   /**
-   * 重置场景的皮肤，建议在[LabzenStage.theme]中设定新的皮肤路径，而不是传入[location]参数（该参数如果提供，会被优先使用，
-   * 但如果不改变[LabzenStage.theme]的设定，这次操作将会是临时性的）
+   * 重置场景的皮肤，建议在[LabzenStageContainer.theme]中设定新的皮肤路径，而不是传入[location]参数（该参数如果提供，会被优先使用，
+   * 但如果不改变[LabzenStageContainer.theme]的设定，这次操作将会是临时性的）
    *
-   * @param stage [LabzenStage]
-   * @param location 可为空，使用[LabzenStage.theme]指定的皮肤
+   * @param stage [LabzenStageContainer]
+   * @param location 可为空，使用[LabzenStageContainer.theme]指定的皮肤
    */
   @JvmStatic
   @JvmOverloads
-  fun reapply(stage: LabzenStage, location: String? = null) {
-    val scene = stage.getStage().scene
+  fun reapply(stage: LabzenStageContainer, location: String? = null) {
+    val scene = stage.instance().scene
     applyTheme(scene, location ?: stage.theme())
   }
 

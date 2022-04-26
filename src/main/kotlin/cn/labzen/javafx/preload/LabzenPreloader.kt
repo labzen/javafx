@@ -6,7 +6,7 @@ import cn.labzen.javafx.initialize.InitializeFailedNotification
 import cn.labzen.javafx.initialize.InitializeFinishedNotification
 import cn.labzen.javafx.initialize.InitializeInformationNotification
 import cn.labzen.javafx.initialize.InitializeStartNotification
-import cn.labzen.javafx.stage.LabzenStage
+import cn.labzen.javafx.stage.LabzenStageContainer
 import cn.labzen.javafx.view.ViewHandler
 import cn.labzen.javafx.view.ViewWrapper
 import cn.labzen.logger.kotlin.logger
@@ -17,7 +17,7 @@ import javafx.stage.Stage
 import javafx.stage.StageStyle
 import javafx.stage.WindowEvent
 
-class LabzenPreloader : Preloader(), LabzenStage {
+class LabzenPreloader : Preloader(), LabzenStageContainer {
 
   private val logger = logger { }
   private lateinit var stageRef: Stage
@@ -40,11 +40,14 @@ class LabzenPreloader : Preloader(), LabzenStage {
     wrapper.createScene()
     stageRef.scene = wrapper.scene
     stageRef.scene.fill = null
-    stageRef.show()
+
+    showAndCenterOnScreen()
   }
 
-  override fun getStage(): Stage =
+  override fun instance(): Stage =
     stageRef
+
+  override fun id(): String = ""
 
   override fun customize(primaryStage: Stage) {
   }
@@ -75,7 +78,7 @@ class LabzenPreloader : Preloader(), LabzenStage {
               throwable = pn.throwable,
               header = "Oops!! A serious exception occurred, and the app will be closed."
             )
-            .shutdownWhenDialogClosed().show();
+            .shutdownWhenDialogClosed().show()
         } else {
           progressBar?.progress = pn.progress
           logger.error(pn.throwable)

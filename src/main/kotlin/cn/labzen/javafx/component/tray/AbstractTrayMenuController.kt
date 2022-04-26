@@ -1,6 +1,6 @@
 package cn.labzen.javafx.component.tray
 
-import cn.labzen.javafx.stage.StageHandler.getPrimaryStage
+import cn.labzen.javafx.stage.StageHandler.primaryStage
 import javafx.application.Platform
 import javafx.scene.control.ContextMenu
 import javafx.scene.control.MenuItem
@@ -12,7 +12,7 @@ abstract class AbstractTrayMenuController : TrayMenuController {
    */
   private fun resumeStage() {
     Platform.runLater {
-      val primaryStage = getPrimaryStage()!!.getStage()
+      val primaryStage = primaryStage().instance()
       if (primaryStage.isIconified) {
         primaryStage.isIconified = false
       }

@@ -359,7 +359,7 @@ class DialogWindowBuilder internal constructor() {
 
       // 设置弹窗模态
       parentStageId?.let {
-        val stage = StageHandler.stage(it)?.getStage()
+        val stage = StageHandler.stage(it)?.instance()
         initOwner(stage)
       }
       when {

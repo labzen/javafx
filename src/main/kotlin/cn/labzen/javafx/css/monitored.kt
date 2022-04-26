@@ -2,6 +2,7 @@ package cn.labzen.javafx.css
 
 import cn.labzen.cells.core.utils.Randoms
 import cn.labzen.javafx.stage.LabzenStage
+import cn.labzen.javafx.stage.LabzenStageContainer
 import cn.labzen.javafx.view.LabzenView
 import cn.labzen.logger.kotlin.logger
 import javafx.collections.ListChangeListener
@@ -64,8 +65,8 @@ internal object MonitoredTargetRegistry {
 
   // ===================================================================================================================
 
-  fun registerStage(instance: LabzenStage) {
-    val stage = instance.getStage()
+  fun registerStage(instance: LabzenStageContainer) {
+    val stage = instance.instance()
     stage.sceneProperty().addListener { _, _, new ->
       new?.also {
         registerScene(stage.scene)

@@ -2,9 +2,6 @@ package cn.labzen.javafx.dialog
 
 object DialogHandler {
 
-  // private val activatedElements = mutableMapOf<String, DialogElement>()
-  // private val activatedWindows = mutableMapOf<String, DialogWindow>()
-
   /**
    * 创建**弹窗**Builder，以窗体的形式的弹框，拥有独立窗体，可遮挡其他窗体
    *
@@ -22,13 +19,4 @@ object DialogHandler {
   @JvmStatic
   fun createElementBuilder() =
     DialogElementBuilder()
-
-  // internal fun registerWindow() {
-  //
-  // }
-  //
-  // internal fun registerElement(de: DialogElement) {
-  //   activatedElements[de.container.toString()] = de
-  // }
-
 }

@@ -4,17 +4,19 @@ import cn.labzen.javafx.exception.ApplicationBootException
 import cn.labzen.javafx.initialize.LabzenApplicationInitializer
 import cn.labzen.javafx.initialize.LabzenInitializerExecutor
 import cn.labzen.javafx.preload.PreloadDetails
-import cn.labzen.javafx.stage.LabzenStage
+import cn.labzen.javafx.stage.LabzenStageContainer
 import cn.labzen.javafx.stage.StageHandler
 import cn.labzen.javafx.view.LabzenView
 import javafx.application.Application
 import javafx.application.Preloader
 import javafx.stage.Stage
+import javafx.stage.WindowEvent
 import java.util.concurrent.CountDownLatch
 
-abstract class LabzenApplication : Application(), LabzenStage {
+abstract class LabzenApplication : Application(), LabzenStageContainer {
 
   private var allInitializers: List<List<LabzenApplicationInitializer>>? = null
+  private val id = StageHandler.generateStageId()
   private lateinit var stageRef: Stage
 
   final override fun init() {
@@ -40,8 +42,8 @@ abstract class LabzenApplication : Application(), LabzenStage {
       closed(it, stageRef)
     }
 
-    StageHandler.go(viewMark = primaryView())
-    stageRef.show()
+    StageHandler.goNow(viewMark = primaryView())
+    showAndCenterOnScreen()
   }
 
   private fun primaryView(): String =
@@ -55,12 +57,8 @@ abstract class LabzenApplication : Application(), LabzenStage {
     } ?: LabzenPlatform.container().primaryView!!
 
   /**
-   * Application主界面跟随默认皮肤，这里不需要设置，如确需改变，请通过[LabzenView]设定
-   */
-  final override fun theme(): String? = null
-
-  /**
    * 整个应用被退出（主Stage）时调用，可处理停闭服务、释放资源等操作，请限制在当前Stage涉及的范围，
+   * 从[Application]开始的第一个界面可能并不是主界面， todo 考虑把该方法独立出一个接口
    */
   abstract fun destroy()
 
@@ -84,8 +82,6 @@ abstract class LabzenApplication : Application(), LabzenStage {
   }
 
   private fun executeInitializers() {
-    // val preloadDetails = LabzenPlatform.container().preloadDetails.get()
-
     for (ois in allInitializers!!) {
       executeOrderedInitializer(ois)
     }
@@ -109,6 +105,21 @@ abstract class LabzenApplication : Application(), LabzenStage {
     countDown.await()
   }
 
-  final override fun getStage(): Stage = stageRef
+  final override fun id(): String = id
 
+  final override fun instance(): Stage = stageRef
+
+  /**
+   * Application主界面跟随默认皮肤，这里不需要设置，如确需改变，请通过[LabzenView]设定
+   * // todo 考虑放开，启动时就确定好皮肤
+   */
+  final override fun theme(): String? = null
+
+  override fun customize(primaryStage: Stage) {
+    TODO("Not yet implemented")
+  }
+
+  override fun closed(event: WindowEvent, primaryStage: Stage) {
+    TODO("Not yet implemented")
+  }
 }

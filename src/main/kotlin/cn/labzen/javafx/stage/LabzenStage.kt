@@ -1,28 +1,52 @@
 package cn.labzen.javafx.stage
 
+import javafx.application.Application
+import javafx.scene.image.Image
 import javafx.stage.Stage
 import javafx.stage.WindowEvent
 
 /**
  * 标识一个独立窗口
  */
-interface LabzenStage {
+abstract class LabzenStage : LabzenStageContainer {
 
-  fun getStage(): Stage
+  private val id = StageHandler.generateStageId()
+  private lateinit var stage: Stage
 
-  // todo customize 和 closed 只在 Application 中应用，还未在普通窗体 Stage 中使用
+  internal fun setStage(stage: Stage) {
+    this.stage = stage
+  }
+
+  final override fun id(): String = id
+
+  final override fun instance(): Stage = stage
+
+  override fun theme(): String? {
+    // do nothing
+    return null
+  }
+
+  override fun customize(primaryStage: Stage) {
+    // do nothing
+  }
+
+  override fun closed(event: WindowEvent, primaryStage: Stage) {
+    // do nothing
+  }
+
   /**
-   * 对 Stage 窗口进行定制化，在窗口显示前被调用 void start(Stage primaryStage)
+   * 新窗口标题，为空时，与[Application]中提供的[Stage]标题相同
    */
-  fun customize(primaryStage: Stage)
+  open fun title(): String? = null
 
   /**
-   * 窗口退出时被调用，可处理停闭服务、释放资源等操作，请注意范围（尽量控制在窗口相关的资源、服务）
+   * 新窗口的任务栏图标，为空时与[Application]中提供的[Stage]图标相同
    */
-  fun closed(event: WindowEvent, primaryStage: Stage)
+  open fun icons(): List<Image>? = null
 
   /**
-   * 窗体应用的皮肤 ***目录***  路径，无皮肤路径指定，使用全局默认皮肤样式 - (通过 app.xml 设定)
+   * 主视图名（fxml文件名/路径，请忽略 '.fxml'），文件名/路径相对于 app.xml
+   * 配置文件中的 "app/meta/structure/view"， 例如："user", "user/detail 即可
    */
-  fun theme(): String?
+  abstract fun primaryView(): String
 }

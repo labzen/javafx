@@ -4,13 +4,13 @@ import cn.labzen.cells.core.kotlin.insureEndsWith
 import cn.labzen.cells.core.utils.Randoms
 import cn.labzen.javafx.LabzenPlatform
 import cn.labzen.javafx.exception.StageViewOperationException
-import cn.labzen.javafx.stage.StageHandler.go
 import cn.labzen.logger.kotlin.logger
 import javafx.application.Platform
 import javafx.collections.FXCollections
 import javafx.fxml.FXMLLoader
 import javafx.scene.Parent
 import javafx.scene.SubScene
+import org.springframework.beans.BeansException
 
 object ViewHandler {
 
@@ -33,10 +33,14 @@ object ViewHandler {
     val resource = LabzenPlatform.resource(path)
     resource ?: throw StageViewOperationException("找不到视图文件：$viewName")
     val loader = FXMLLoader(resource, null, null) {
-      LabzenPlatform.container().springApplicationContext.get().getBean(it)
+      try {
+        LabzenPlatform.container().springApplicationContext.get().getBean(it)
+      } catch (e: BeansException) {
+        it.getDeclaredConstructor().newInstance()
+      }
     }
 
-    val id = Randoms.string(5)
+    val id = generateViewId()
     val loadedView: Parent = loader.load()
 
     val viewController = when (val lc = loader.getController<Any>()) {
@@ -56,6 +60,8 @@ object ViewHandler {
       views[id] = it
     }
   }
+
+  private fun generateViewId() = Randoms.string(10)
 
   internal fun lookup(viewId: String): ViewWrapper? =
     views[viewId]
