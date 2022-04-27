@@ -1,6 +1,7 @@
 package cn.labzen.javafx.view
 
 import cn.labzen.cells.core.kotlin.initOnce
+import cn.labzen.cells.core.utils.Randoms
 import cn.labzen.javafx.animation.AnimationType
 import cn.labzen.javafx.dialog.DialogElement
 import cn.labzen.javafx.stage.LabzenStage
@@ -11,18 +12,14 @@ import java.util.*
 
 abstract class LabzenView : Initializable {
 
-  private val id = initOnce<String>()
+  private val id = Randoms.string(10)
   private val wrapper = initOnce<ViewWrapper>()
   internal var wrappedByDialog: DialogElement? = null
 
   override fun initialize(location: URL?, resources: ResourceBundle?) {
   }
 
-  internal fun setId(value: String) {
-    id.set(value)
-  }
-
-  fun id() = id.get()
+  fun id(): String = id
 
   internal fun setWrapper(value: ViewWrapper) {
     wrapper.set(value)

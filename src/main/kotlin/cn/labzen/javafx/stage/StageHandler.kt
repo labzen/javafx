@@ -78,8 +78,6 @@ object StageHandler {
     return ls
   }
 
-  internal fun generateStageId() = Randoms.string(10)
-
   /**
    * 获取已创建的窗口
    */

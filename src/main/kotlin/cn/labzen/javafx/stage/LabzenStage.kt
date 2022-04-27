@@ -1,5 +1,6 @@
 package cn.labzen.javafx.stage
 
+import cn.labzen.cells.core.utils.Randoms
 import javafx.application.Application
 import javafx.scene.image.Image
 import javafx.stage.Stage
@@ -10,7 +11,7 @@ import javafx.stage.WindowEvent
  */
 abstract class LabzenStage : LabzenStageContainer {
 
-  private val id = StageHandler.generateStageId()
+  private val id = Randoms.string(10)
   private lateinit var stage: Stage
 
   internal fun setStage(stage: Stage) {

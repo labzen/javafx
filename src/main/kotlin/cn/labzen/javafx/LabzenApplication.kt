@@ -1,5 +1,6 @@
 package cn.labzen.javafx
 
+import cn.labzen.cells.core.utils.Randoms
 import cn.labzen.javafx.exception.ApplicationBootException
 import cn.labzen.javafx.initialize.LabzenApplicationInitializer
 import cn.labzen.javafx.initialize.LabzenInitializerExecutor
@@ -16,7 +17,7 @@ import java.util.concurrent.CountDownLatch
 abstract class LabzenApplication : Application(), LabzenStageContainer {
 
   private var allInitializers: List<List<LabzenApplicationInitializer>>? = null
-  private val id = StageHandler.generateStageId()
+  private val id = Randoms.string(10)
   private lateinit var stageRef: Stage
 
   final override fun init() {
