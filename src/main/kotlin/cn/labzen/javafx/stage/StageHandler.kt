@@ -8,6 +8,7 @@ import com.sun.javafx.stage.StageHelper
 import javafx.application.Platform
 import javafx.collections.FXCollections
 import javafx.stage.Stage
+import org.springframework.beans.BeansException
 
 object StageHandler {
 
@@ -49,7 +50,11 @@ object StageHandler {
   @JvmStatic
   fun createStage(cls: Class<out LabzenStage>): LabzenStage {
     val sac = LabzenPlatform.container().springApplicationContext.get()
-    val ls = sac.autowireCapableBeanFactory.createBean(cls)
+    val ls = try {
+      sac.getBean(cls)
+    } catch (e: BeansException) {
+      sac.autowireCapableBeanFactory.createBean(cls)
+    }
 
     stages[ls.id()] = ls
     stageSceneHistories[ls.id()] = StageViewHistory()

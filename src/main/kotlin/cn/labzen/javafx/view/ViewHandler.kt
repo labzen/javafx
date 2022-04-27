@@ -33,10 +33,11 @@ object ViewHandler {
     val resource = LabzenPlatform.resource(path)
     resource ?: throw StageViewOperationException("找不到视图文件：$viewName")
     val loader = FXMLLoader(resource, null, null) {
+      val sac = LabzenPlatform.container().springApplicationContext.get()
       try {
-        LabzenPlatform.container().springApplicationContext.get().getBean(it)
+        sac.getBean(it)
       } catch (e: BeansException) {
-        it.getDeclaredConstructor().newInstance()
+        sac.autowireCapableBeanFactory.createBean(it)
       }
     }
 
@@ -98,7 +99,6 @@ object ViewHandler {
       val history = viewChildrenHistories.computeIfAbsent("${primeId}__${nodeId}") { ViewChildrenHistory() }
       history.push(wrapper)
 
-      // logger.info { "==> go ${meta.root.childrenUnmodifiable.size}" }
       node.root = wrapper.root
     }
   }
