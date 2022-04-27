@@ -2,13 +2,15 @@ package cn.labzen.javafx.controller;
 
 import cn.labzen.javafx.stage.StageHandler;
 import cn.labzen.javafx.view.LabzenView;
-import cn.labzen.javafx.view.ViewHandler;
 import javafx.fxml.FXML;
 import javafx.scene.SubScene;
+import javafx.scene.layout.Pane;
 import org.jetbrains.annotations.Nullable;
 
 public class VbViewController extends LabzenView {
 
+  @FXML
+  public Pane subViewPane;
   @FXML
   private SubScene innerPane;
 
@@ -28,25 +30,26 @@ public class VbViewController extends LabzenView {
 
   @Nullable
   @Override
-  public SubScene partialViewContainerNode(@Nullable String id) {
-    return innerPane;
+  public Pane regionalPane(@Nullable String id) {
+    return subViewPane;
   }
 
   public void show() {
-    ViewHandler.go(id(), "sub/vb1");
+    go("sub/vb1");
   }
 
   public void next() {
     if (index >= 3) {
       return;
     }
-    ViewHandler.go(id(), "sub/vb" + ++index);
+    go("sub/vb" + ++index);
   }
 
   public void prev() {
     if (index <= 1) {
       return;
     }
-    ViewHandler.back(id(), null, null, "sub/vb" + --index);
+    --index;
+    back();
   }
 }

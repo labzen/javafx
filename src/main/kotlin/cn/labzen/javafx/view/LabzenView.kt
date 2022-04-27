@@ -5,7 +5,7 @@ import cn.labzen.javafx.animation.AnimationType
 import cn.labzen.javafx.dialog.DialogElement
 import cn.labzen.javafx.stage.LabzenStage
 import javafx.fxml.Initializable
-import javafx.scene.SubScene
+import javafx.scene.layout.Pane
 import java.net.URL
 import java.util.*
 
@@ -30,15 +30,24 @@ abstract class LabzenView : Initializable {
 
   fun wrapper() = wrapper.get()
 
-  open fun partialViewContainerNode(id: String?): SubScene? = null
+  open fun regionalPane(id: String?): Pane? = null
 
   @JvmOverloads
   fun go(nodeId: String? = null, viewName: String, parameters: Map<String, Any>? = null) {
     ViewHandler.go(id(), nodeId, viewName, parameters)
   }
 
-  fun back() {
-    ViewHandler.back(id())
+  @JvmOverloads
+  fun back(nodeId: String? = null, viewMark: String? = null, parameters: Map<String, Any>? = null) {
+    ViewHandler.back(id(), nodeId, viewMark, viewMark, parameters)
+  }
+
+  fun back(nodeId: String? = null, parameters: Map<String, Any>? = null) {
+    ViewHandler.back(id(), nodeId, parameters = parameters)
+  }
+
+  fun back(parameters: Map<String, Any>) {
+    ViewHandler.back(id(), parameters = parameters)
   }
 
   /**

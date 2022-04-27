@@ -9,7 +9,7 @@ import javafx.application.Platform
 import javafx.collections.FXCollections
 import javafx.fxml.FXMLLoader
 import javafx.scene.Parent
-import javafx.scene.SubScene
+import javafx.scene.layout.Pane
 import org.springframework.beans.BeansException
 
 object ViewHandler {
@@ -72,7 +72,7 @@ object ViewHandler {
    * 到新的子视图
    *
    * @param primeId 视图（scene view）ID
-   * @param nodeId 视图内，需要变更局部子视图的、作为容器概念的节点（继承于[javafx.scene.layout.Region]）名称
+   * @param nodeId 视图内，需要变更局部子视图的、作为容器概念的节点（继承于[javafx.scene.layout.Pane]）名称
    * @param viewName 视图名（fxml文件名/路径，请忽略 '.fxml'），文件名/路径相对于 app.xml 配置文件中的 "app/meta/structure/view"，
    *             例如："user", "user/detail 即可
    * @param parameters 需要传递视图的参数
@@ -99,7 +99,8 @@ object ViewHandler {
       val history = viewChildrenHistories.computeIfAbsent("${primeId}__${nodeId}") { ViewChildrenHistory() }
       history.push(wrapper)
 
-      node.root = wrapper.root
+      node.children.clear()
+      node.children.add(wrapper.root)
     }
   }
 
@@ -107,7 +108,7 @@ object ViewHandler {
    * 将子视图回到上一个或某一个视图，[viewId] 与 [viewName] 同时为null时，将显示最后一个视图，类似 back(1)的意思
    *
    * @param primeId 视图（scene view）ID
-   * @param nodeId 视图内，需要变更局部子视图的、作为容器概念的节点（继承于[javafx.scene.layout.Region]）名称
+   * @param nodeId 视图内，需要变更局部子视图的、作为容器概念的节点（继承于[javafx.scene.layout.Pane]）名称
    * @param viewId 视图的ID，通过 [go] 方法获取，可准确定位到一个视图在视图栈中的位置；当与 [viewName] 同时出现时，该参数优先被使用
    * @param viewName 视图名（fxml文件名/路径，请忽略 '.fxml'），文件名/路径相对于 app.xml 配置文件中的 "app/meta/structure/view"，
    *             例如："user", "user/detail 即可；如在窗口的视图栈中存在多个相同的view，则默认使用视图栈中最新的那个
@@ -123,7 +124,7 @@ object ViewHandler {
     parameters: Map<String, Any>? = null
   ) {
     Platform.runLater {
-      val subScene = try {
+      val node = try {
         check(primeId, nodeId)
       } catch (e: Exception) {
         logger.warn(e.message!!)
@@ -131,9 +132,11 @@ object ViewHandler {
       }
 
       val history = viewChildrenHistories["${primeId}__${nodeId}"]!!
-      val viewMeta = history.searchAndPop(viewId, viewName, parameters)
-      viewMeta?.apply {
-        subScene.root = root
+      val wrapper = history.searchAndPop(viewId, viewName, parameters)
+
+      wrapper?.apply {
+        node.children.clear()
+        node.children.add(wrapper.root)
       } ?: logger.warn {
         "无法执行子视图 back() for - prime_view_id: $primeId, node_container: $nodeId, view_id: $viewId, view_name: $viewName"
       }
@@ -164,7 +167,7 @@ object ViewHandler {
     return ""
   }
 
-  private fun check(primeId: String, nodeId: String? = null): SubScene {
+  private fun check(primeId: String, nodeId: String?): Pane {
     val primeView = views[primeId] ?: throw IllegalArgumentException("找不到可变更的主视图 prime_view_id: $primeId")
 
     val controller = primeView.controller
@@ -172,6 +175,7 @@ object ViewHandler {
       throw IllegalArgumentException("在主视图中实现局部视图变更，需要继承类 cn.labzen.javafx.view.LabzenView")
     }
 
-    return controller.partialViewContainerNode(nodeId) ?: throw IllegalArgumentException("找不到可做局部视图变更的容器节点")
+    return controller.regionalPane(nodeId) ?: throw IllegalArgumentException("找不到可做局部视图变更的容器节点")
   }
+
 }
