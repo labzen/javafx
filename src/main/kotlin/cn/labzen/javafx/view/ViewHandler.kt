@@ -57,6 +57,7 @@ object ViewHandler {
     return ViewWrapper(vcId, name, loadedView, vc, prefWidth, prefHeight).also {
       it.updateParameter(parameters)
       viewsById[vcId] = it
+      viewsByName[name] = it
     }
   }
 
