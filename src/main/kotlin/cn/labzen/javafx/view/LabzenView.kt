@@ -29,20 +29,46 @@ abstract class LabzenView : Initializable {
 
   open fun regionalPane(id: String?): Pane? = null
 
+  /**
+   * 在本视图中的某个容器中，做子视图的跳转
+   *
+   * @param nodeId 视图中子视图容器的ID，借由[regionalPane]方法决定具体的容器实例
+   * @param viewName 跳转的子视图名（fxml文件名/路径，请忽略 '.fxml'），文件名/路径相对于 app.xml
+   * 配置文件中的 "app/meta/structure/view"， 例如："user", "user/detail 即可
+   * @param parameters 给子视图传递的参数
+   */
   @JvmOverloads
   fun go(nodeId: String? = null, viewName: String, parameters: Map<String, Any>? = null) {
     ViewHandler.go(id(), nodeId, viewName, parameters)
   }
 
+  /**
+   * 在本视图中的某个容器中，做子视图的跳回
+   *
+   * @param nodeId 视图中子视图容器的ID，借由[regionalPane]方法决定具体的容器实例
+   * @param viewMark 跳转的子视图名，或视图的ID
+   * @param parameters 给子视图传递的参数
+   */
   @JvmOverloads
   fun back(nodeId: String? = null, viewMark: String? = null, parameters: Map<String, Any>? = null) {
     ViewHandler.back(id(), nodeId, viewMark, viewMark, parameters)
   }
 
+  /**
+   * 在本视图中的某个容器中，做子视图的跳回，直接跳回上一个视图
+   *
+   * @param nodeId 视图中子视图容器的ID，借由[regionalPane]方法决定具体的容器实例
+   * @param parameters 给子视图传递的参数
+   */
   fun back(nodeId: String? = null, parameters: Map<String, Any>? = null) {
     ViewHandler.back(id(), nodeId, parameters = parameters)
   }
 
+  /**
+   * 在本视图中的默认容器中，做子视图的跳回，直接跳回上一个视图
+   *
+   * @param parameters 给子视图传递的参数
+   */
   fun back(parameters: Map<String, Any>) {
     ViewHandler.back(id(), parameters = parameters)
   }
