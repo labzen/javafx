@@ -80,18 +80,4 @@ class ViewWrapper(
     }
   }
 
-  /**
-   * 将视图从窗体场景中移除
-   */
-  fun dispose() {
-
-  }
-
-  /**
-   * 销毁视图
-   */
-  fun destroy() {
-
-  }
-
 }

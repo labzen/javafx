@@ -6,7 +6,7 @@
 <?import javafx.scene.control.Pagination?>
 <?import javafx.scene.layout.AnchorPane?>
 <AnchorPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-            minWidth="-Infinity" fx:controller="cn.labzen.javafx.controller.SubViewController"
+            minWidth="-Infinity" fx:controller="cn.labzen.javafx.controller.Sub3ViewController"
             prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17">
   <Button layoutX="99.0" layoutY="59.0" mnemonicParsing="false" text="ToggleButton" onAction="#change"/>
   <Label layoutX="194.0" layoutY="125.0" text="Label" fx:id="abc"/>

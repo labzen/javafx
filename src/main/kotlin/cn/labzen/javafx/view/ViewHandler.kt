@@ -96,8 +96,10 @@ object ViewHandler {
       val primeWrapper = lookup(primeIdOrName)!!
       val key = "${primeWrapper.id}__${nodeId ?: "_nid"}"
       val history = viewChildrenHistories.computeIfAbsent(key) { ViewChildrenHistory() }
+      val currentWrapper = history.peek()
       history.push(wrapper)
 
+      currentWrapper?.controller?.dispose()
       node.children.clear()
       node.children.add(wrapper.root)
     }
@@ -133,13 +135,41 @@ object ViewHandler {
       val primeWrapper = lookup(primeIdOrName)!!
       val key = "${primeWrapper.id}__${nodeId ?: "_nid"}"
       val history = viewChildrenHistories[key]!!
-      val wrapper = history.searchAndPop(viewId, viewName, parameters)
+      val foundWrapper = history.search(viewId, viewName)
 
-      wrapper?.apply {
-        node.children.clear()
-        node.children.add(wrapper.root)
-      } ?: logger.warn {
-        "无法执行子视图 back() for - prime_view_id: $primeIdOrName, node_container: $nodeId, view_id: $viewId, view_name: $viewName"
+      val poppedWrappers = if (foundWrapper == null) {
+        history.pop()?.let { listOf(it) } ?: emptyList()
+      } else {
+        history.popUntil(foundWrapper)
+      }
+
+      destroyView(poppedWrappers)
+
+      val resumeWrapper = history.peek()
+      if (resumeWrapper == null) {
+        logger.debug() {
+          "找不到子视图 back() for - prime_view: $primeIdOrName, node: $nodeId, sub_view_id: $viewId, sub_view_name: $viewName"
+        }
+        return@runLater
+      }
+
+      // val wrapper = history.searchAndPop(viewId, viewName, parameters)
+      resumeWrapper.updateParameter(parameters)
+      node.children.clear()
+      node.children.add(resumeWrapper.root)
+    }
+  }
+
+  /**
+   * 销毁弹出的视图
+   */
+  private fun destroyView(viewWrappers: List<ViewWrapper>) {
+    Platform.runLater {
+      for (wrapper in viewWrappers) {
+        wrapper.controller?.apply {
+          dispose()
+          destroy()
+        }
       }
     }
   }

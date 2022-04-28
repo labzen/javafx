@@ -78,6 +78,22 @@ abstract class LabzenView : Initializable {
    */
   open fun theme(): String? = null
 
+  // --------------------------------- about view removal ---------------------------------
+
+  /**
+   * 将视图从窗体场景中移除，先调用
+   */
+  open fun dispose() {
+    // default do nothing
+  }
+
+  /**
+   * 销毁视图，后调用
+   */
+  open fun destroy() {
+    // default do nothing
+  }
+
   // --------------------------------- about dialog element opr ------------------------------------
 
   /**
