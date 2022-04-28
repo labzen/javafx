@@ -174,28 +174,48 @@ object ViewHandler {
     }
   }
 
+  // @return 视图替换掉原 [viewId] 的视图后，在窗口的视图栈中的唯一ID，位置与原 [viewId] 的视图位置一致，
   /**
-   * 替换一个已存在的视图，如不存在，则操作不生效；操作完成后，视图栈的size不改变，未涉及到的其他视图原位置不变
+   * 替换当前的视图，操作完成后，视图栈的size不改变，其他视图原位置不变，原视图被弹出（back）后销毁
    *
    * @param primeIdOrName 视图（scene view）ID，或视图名
-   * @param node 视图内，需要变更局部子视图的、作为容器概念的节点（继承于[javafx.scene.layout.Region]）名称
-   * @param viewId 视图的ID，通过 go 方法获取，可准确定位到一个视图在视图栈中的位置；不指定该参数，则认为是替换当前视图
+   * @param nodeId 视图内，需要变更局部子视图的、作为容器概念的节点（继承于[javafx.scene.layout.Region]）名称
    * @param viewName 视图名（fxml文件名/路径，请忽略 '.fxml'），文件名/路径相对于 app.xml 配置文件中的 "app/meta/structure/view"，
    *             例如："user", "user/detail 即可
    * @param  parameters 需要传递视图的参数
-   *
-   * @return 视图替换掉原 [viewId] 的视图后，在窗口的视图栈中的唯一ID，位置与原 [viewId] 的视图位置一致，当视图被弹出（back）后销毁
    */
   @JvmStatic
   @JvmOverloads
   fun replace(
-    primeIdOrName: String? = null,
-    node: String? = null,
-    viewId: String? = null,
+    primeIdOrName: String,
+    nodeId: String? = null,
     viewName: String,
     parameters: Map<String, Any>? = null
-  ): String {
-    return ""
+  ) {
+    Platform.runLater {
+      val node = try {
+        check(primeIdOrName, nodeId)
+      } catch (e: Exception) {
+        logger.warn(e.message!!)
+        return@runLater
+      }
+
+      val wrapper = loadView(viewName)
+      wrapper.updateParameter(parameters)
+
+      val primeWrapper = lookup(primeIdOrName)!!
+      val key = "${primeWrapper.id}__${nodeId ?: "_nid"}"
+      val history = viewChildrenHistories.computeIfAbsent(key) { ViewChildrenHistory() }
+      val currentWrapper = history.pop()
+      history.push(wrapper)
+
+      currentWrapper?.run {
+        destroyView(listOf(this))
+      }
+
+      node.children.clear()
+      node.children.add(wrapper.root)
+    }
   }
 
   private fun check(primeViewMark: String, nodeId: String?): Pane {
