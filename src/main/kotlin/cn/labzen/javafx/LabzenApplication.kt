@@ -117,10 +117,10 @@ abstract class LabzenApplication : Application(), LabzenStageContainer {
   final override fun theme(): String? = null
 
   override fun customize(primaryStage: Stage) {
-    TODO("Not yet implemented")
+    // do nothing
   }
 
   override fun closed(event: WindowEvent, primaryStage: Stage) {
-    TODO("Not yet implemented")
+    // do nothing
   }
 }
