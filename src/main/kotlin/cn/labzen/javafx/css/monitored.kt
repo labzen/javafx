@@ -1,7 +1,6 @@
 package cn.labzen.javafx.css
 
 import cn.labzen.cells.core.utils.Randoms
-import cn.labzen.javafx.stage.LabzenStage
 import cn.labzen.javafx.stage.LabzenStageContainer
 import cn.labzen.javafx.view.LabzenView
 import cn.labzen.logger.kotlin.logger
@@ -10,6 +9,7 @@ import javafx.collections.ObservableList
 import javafx.scene.Parent
 import javafx.scene.Scene
 import java.lang.ref.WeakReference
+import java.net.URI
 import java.net.URL
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -26,10 +26,13 @@ internal object MonitoredTargetRegistry {
       return
     }
 
-    stylesheets.map {
+    stylesheets.filter { !isInJarFile(it) }.map {
       MonitoredStylesheets.createOrAppend(it, wrapper)
     }.forEach(MonitoredStylesheets::permeate)
   }
+
+  private fun isInJarFile(uri: String): Boolean =
+    "jar" == URI.create(uri).scheme
 
   private fun registerParent(parent: Parent) {
     monitor(parent.stylesheets)
@@ -123,7 +126,7 @@ internal class StylesheetsListener(private val wrapper: StylesheetsWrapper) : Li
   }
 }
 
-internal class MonitoredStylesheets private constructor(private val uri: String) {
+internal class MonitoredStylesheets private constructor(uri: String) {
 
   private val logger = logger { }
 
