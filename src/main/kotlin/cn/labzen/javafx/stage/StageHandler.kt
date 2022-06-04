@@ -1,6 +1,5 @@
 package cn.labzen.javafx.stage
 
-import cn.labzen.cells.core.utils.Randoms
 import cn.labzen.javafx.LabzenPlatform
 import cn.labzen.javafx.exception.StageViewOperationException
 import cn.labzen.logger.kotlin.logger
@@ -38,7 +37,8 @@ object StageHandler {
     return originalMain
   }
 
-  internal fun primaryStage() =
+  @JvmStatic
+  fun primaryStage() =
     mainStage
 
   internal fun allStages() =
@@ -89,7 +89,7 @@ object StageHandler {
   //，如 [cached] = true，并在视图栈中已存在该视图，则将该视图实例移至栈顶；如想同时存在多个相同的视图在栈中，则 [cached] 指为false
   // @return 视图在窗口的视图栈中的唯一ID，可在视图栈中找到准确的位置，当视图被弹出（back）后销毁
   /**
-   * 当前窗体更新到新的视图
+   * 指定窗体更新到新的视图
    *
    * @param stageId 独立窗口ID，通过 [createStage] 方法获取，如需操作主窗口，则不需要此参数
    * @param viewMark 视图名（fxml文件名/路径，请忽略 '.fxml'），文件名/路径相对于 app.xml 配置文件中的 "app/meta/structure/view"，
@@ -105,6 +105,23 @@ object StageHandler {
   ) {
     Platform.runLater {
       goNow(stageId, viewMark, parameters)
+    }
+  }
+
+  /**
+   * 当前窗体更新到新的视图
+   *
+   * @param viewMark 视图名（fxml文件名/路径，请忽略 '.fxml'），文件名/路径相对于 app.xml 配置文件中的 "app/meta/structure/view"，
+   *             例如："user", "user/detail 即可
+   * @param parameters 需要传递视图的参数
+   */
+  @JvmStatic
+  fun go(
+    viewMark: String,
+    parameters: Map<String, Any>? = null
+  ) {
+    Platform.runLater {
+      goNow(null, viewMark, parameters)
     }
   }
 

@@ -27,17 +27,22 @@ class ViewWrapper(
     controller?.setWrapper(this)
   }
 
-  fun updateParameter(parameters: Map<String, Any>?) {
+  internal fun updateParameter(parameters: Map<String, Any>?) {
     parameters?.run {
       parameter.clear()
       parameter.putAll(parameters)
     }
+    controller?.updateParameter(parameter)
   }
 
-  fun appendParameter(parameters: Map<String, Any>?) {
+  internal fun appendParameter(parameters: Map<String, Any>?) {
     parameters?.run {
       parameter.putAll(parameters)
     }
+  }
+
+  internal fun initialized() {
+    controller?.loaded()
   }
 
   fun attachTo(stage: LabzenStageContainer) {

@@ -9,8 +9,8 @@ internal class StageViewHistory {
   private val stack = ArrayDeque<ViewWrapper>()
 
   fun loadAndPush(viewName: String, parameters: Map<String, Any>?): ViewWrapper =
-    ViewHandler.loadView(viewName).also {
-      it.updateParameter(parameters)
+    ViewHandler.loadView(viewName, parameters).also {
+      // it.updateParameter(parameters)
       stack.push(it)
     }
 

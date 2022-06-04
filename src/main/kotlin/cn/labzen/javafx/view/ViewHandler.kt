@@ -58,6 +58,8 @@ object ViewHandler {
       it.updateParameter(parameters)
       viewsById[vcId] = it
       viewsByName[name] = it
+
+      it.initialized()
     }
   }
 
@@ -90,8 +92,8 @@ object ViewHandler {
         return@runLater
       }
 
-      val wrapper = loadView(viewName)
-      wrapper.updateParameter(parameters)
+      val wrapper = loadView(viewName, parameters)
+      // wrapper.updateParameter(parameters)
 
       val primeWrapper = lookup(primeIdOrName)!!
       val key = "${primeWrapper.id}__${nodeId ?: "_nid"}"
@@ -200,8 +202,8 @@ object ViewHandler {
         return@runLater
       }
 
-      val wrapper = loadView(viewName)
-      wrapper.updateParameter(parameters)
+      val wrapper = loadView(viewName, parameters)
+      // wrapper.updateParameter(parameters)
 
       val primeWrapper = lookup(primeIdOrName)!!
       val key = "${primeWrapper.id}__${nodeId ?: "_nid"}"

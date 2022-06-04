@@ -18,6 +18,11 @@ abstract class LabzenApplicationInitializer {
   open fun order(): Int = 1
 
   /**
+   * 初始化器是否可用，默认true，可根据项目实际情况，动态决定初始化器是否执行（包括所有方法）
+   */
+  open fun available(): Boolean = true
+
+  /**
    * 初始化器开始执行前输出的信息
    */
   open fun startMessage(): String? = null

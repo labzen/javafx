@@ -14,9 +14,20 @@ abstract class LabzenView : Initializable {
 
   private val id = Randoms.string(10)
   private val wrapper = initOnce<ViewWrapper>()
+  private lateinit var parameter: ViewParameter
   internal var wrappedByDialog: DialogElement? = null
 
+  /**
+   * JavaFX用来初始化的代码块，调用时机较早
+   */
   override fun initialize(location: URL?, resources: ResourceBundle?) {
+  }
+
+  /**
+   * FXML加载完成，各项初始化工作已完毕后调用
+   */
+  open fun loaded() {
+    // do nothing
   }
 
   fun id(): String = id
@@ -26,6 +37,13 @@ abstract class LabzenView : Initializable {
   }
 
   fun wrapper() = wrapper.get()
+
+  internal fun updateParameter(parameter: ViewParameter) {
+    this.parameter = parameter
+  }
+
+  fun parameter(key: String): Optional<Any> =
+    Optional.ofNullable(this.parameter[key])
 
   open fun regionalPane(id: String?): Pane? = null
 

@@ -16,6 +16,11 @@ class LabzenInitializerExecutor(
   }
 
   override fun call() {
+    if (!initializer.available()) {
+      record.finished(null, 0)
+      return
+    }
+
     record.start(initializer.startMessage())
 
     val startAt = System.currentTimeMillis()
